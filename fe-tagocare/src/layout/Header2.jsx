@@ -5,13 +5,13 @@ import Button from "../components/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_caregiver_info } from "../store/reducer/caregiverReducer";
+import { BiCartAdd } from "react-icons/bi";
 
 const Header2 = () => {
     const dispatch = useDispatch();
     const [openInputSearch, setOpenInputSearch] = useState(false);
 
     const { userInfo } = useSelector((state) => state.auth);
-    const { caregiver } = useSelector((state) => state.caregiver);
 
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -41,11 +41,9 @@ const Header2 = () => {
         }
     }, [userInfo.id]);
 
-    const handleSellerChannelClick = () => {
-        if (userInfo && caregiver === null) {
-            navigate("/register-caregiver");
-        } else if (userInfo && caregiver !== null) {
-            window.location.href = "http://localhost:5174/login";
+    const direct = () => {
+        if (userInfo) {
+            navigate("/cart");
         } else {
             navigate("/login");
         }
@@ -71,7 +69,7 @@ const Header2 = () => {
             </Link>
 
             <div className="flex items-center gap-12">
-                <ul className="flex gap-10 font-bold text-[15px] cursor-pointer z-20">
+                <ul className="flex items-center gap-10 font-bold text-[15px] cursor-pointer z-20">
                     <Link to={"/"}>
                         <li
                             className={`${
@@ -116,10 +114,6 @@ const Header2 = () => {
                             Shop
                         </li>
                     </Link>
-
-                    <li onClick={handleSellerChannelClick} className="mb-2">
-                        Caregiver Channel
-                    </li>
                 </ul>
 
                 <div>
@@ -141,15 +135,27 @@ const Header2 = () => {
                     </form>
                 </div>
 
-                {userInfo ? (
-                    <Link to={"/dashboard"}>
-                        <Button content={userInfo.name} />
+                <div className="flex items-center justify-center gap-3">
+                    <Link
+                        onClick={(e) => {
+                            e.preventDefault();
+                            direct();
+                        }}
+                        className="cursor-pointer font-bold border-[3px] px-4 rounded-full rounded-tl-3xl border-[#ed6436]"
+                    >
+                        <BiCartAdd className="text-[20px]" />
                     </Link>
-                ) : (
-                    <Link to={"/login"}>
-                        <Button content="Sign In" />
-                    </Link>
-                )}
+
+                    {userInfo ? (
+                        <Link to={"/dashboard"}>
+                            <Button content={userInfo.name} />
+                        </Link>
+                    ) : (
+                        <Link to={"/login"}>
+                            <Button content="Sign In" />
+                        </Link>
+                    )}
+                </div>
             </div>
         </header>
     );

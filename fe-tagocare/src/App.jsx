@@ -19,8 +19,17 @@ import Wishlist from "./pages/dashboard/Wishlist";
 import OrderDetails from "./pages/dashboard/OrderDetails";
 import Chat from "./pages/dashboard/Chat";
 import RegisterCaregiver from "./pages/RegisterCaregiver";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { get_categories } from "./store/reducer/homeReducer";
 
 function App() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(get_categories());
+    }, []);
+
     return (
         <BrowserRouter>
             <Routes>

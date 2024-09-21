@@ -24,7 +24,8 @@ class serviceController {
                     category,
                     price,
                     discount,
-                    description,
+                    short_description,
+                    long_description,
                 } = fields;
                 let { images } = files;
 
@@ -44,8 +45,11 @@ class serviceController {
                     errors.category = "category is required";
                 }
 
-                if (!description) {
-                    errors.description = "description is required";
+                if (!short_description) {
+                    errors.short_description = "short description is required";
+                }
+                if (!long_description) {
+                    errors.long_description = "long description is required";
                 }
                 if (!price) {
                     errors.price = "Price is required";
@@ -93,7 +97,8 @@ class serviceController {
                         category,
                         price,
                         discount,
-                        description,
+                        short_description,
+                        long_description,
                         slug: slugify(name),
                         images: allImageUrl,
                     });
@@ -184,7 +189,8 @@ class serviceController {
                 category,
                 price,
                 discount,
-                description,
+                short_description,
+                long_description,
                 oldImage,
             } = fields;
             let { newImage } = files;
@@ -198,8 +204,11 @@ class serviceController {
                 errors.category = "category is required";
             }
 
-            if (!description) {
-                errors.description = "description is required";
+            if (!short_description) {
+                errors.short_description = "short description is required";
+            }
+            if (!long_description) {
+                errors.long_description = "long description is required";
             }
             if (!price) {
                 errors.price = "Price is required";
@@ -292,7 +301,8 @@ class serviceController {
                     name,
                     category,
                     price,
-                    description,
+                    short_description,
+                    long_description,
                     images: finalImage,
                 });
                 responseReturn(res, 200, { message: "Updated Successfully" });

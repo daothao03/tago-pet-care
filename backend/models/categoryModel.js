@@ -40,4 +40,4 @@ categorySchema.index({
     name: "text",
 });
 
-module.exports = model("Category", categorySchema);
+module.exports = model("categories", categorySchema);

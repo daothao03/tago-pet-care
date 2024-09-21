@@ -1,13 +1,67 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Service from "../../components/Service";
 import { Range } from "react-range";
+import { formatPrice } from "../../utils/utils";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    price_range_product,
+    query_services,
+} from "../../store/reducer/homeReducer";
+import { useSearchParams } from "react-router-dom";
+import Pagination from "../../components/Pagination";
 
 const AllServices = () => {
-    const defaultLow = 10000;
-    const defaultHigh = 100000;
+    const dispatch = useDispatch();
+    const { categories, priceRange, services, parPage, totalService } =
+        useSelector((state) => state.home);
+
+    const defaultLow = priceRange?.low || 0;
+    const defaultHigh = priceRange?.high || 10000;
     const [state, setState] = useState({
         values: [defaultLow, defaultHigh],
     });
+
+    const [sortPrice, setSortPrice] = useState("");
+    const [category, setCategory] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        setState({
+            values: [defaultLow, defaultHigh],
+        });
+    }, [priceRange]);
+
+    //price range
+    useEffect(() => {
+        dispatch(price_range_product("service"));
+    }, []);
+
+    useEffect(() => {
+        dispatch(
+            query_services({
+                lowPrice: state.values[0],
+                highPrice: state.values[1],
+                category,
+                currentPage,
+                sortPrice,
+            })
+        );
+    }, [state.values[0], state.values[1], category, currentPage, sortPrice]);
+
+    useEffect(() => {
+        const categoryParam = searchParams.get("category");
+        if (categoryParam) {
+            setCategory(categoryParam);
+        }
+    }, [searchParams]);
+
+    const handleCategoryClick = (slug) => {
+        setCategory(slug);
+        setSearchParams({ category: slug });
+        setCurrentPage(1);
+    };
 
     return (
         <section className="container grid grid-cols-4 gap-[50px] mt-[100px]">
@@ -39,8 +93,8 @@ const AllServices = () => {
                         )}
                     />
                     <span className="text-slate-800 font-semibold flex justify-between items-center text-[16px]">
-                        <span>{state.values[0]}</span>
-                        <span>{state.values[1]}</span>
+                        <span>{formatPrice(state.values[0])}</span>
+                        <span>{formatPrice(state.values[1])}</span>
                     </span>
                 </div>
 
@@ -50,47 +104,75 @@ const AllServices = () => {
                     </h2>
 
                     <ul>
-                        <li className="font-semibold text-[17px] mb-4 py-1 border-b-2">
-                            Bath
-                        </li>
-                        <li className="font-semibold text-[17px] mb-4 py-1 border-b-2">
-                            Spa
-                        </li>
-                        <li className="font-semibold text-[17px] mb-4 py-1 border-b-2">
-                            Walk
-                        </li>
+                        {categories.map(
+                            (c) =>
+                                c.type === "service" && (
+                                    <li
+                                        // onClick={() => setCategory(c.slug)}
+                                        onClick={() =>
+                                            handleCategoryClick(c.slug)
+                                        }
+                                        key={c._id}
+                                        className={` text-[17px] cursor-pointer mb-4 py-1 border-b-2 flex gap-[30px]  items-center`}
+                                    >
+                                        <img
+                                            src={c.image}
+                                            alt=""
+                                            className="w-[70px] h-[70px] object-cover rounded-md"
+                                        />
+                                        <span className="font-semibold">
+                                            {c.name}
+                                        </span>
+                                    </li>
+                                )
+                        )}
                     </ul>
                 </div>
             </div>
             <div className="col-span-3 grid ">
                 <div className="flex justify-between items-center mb-6">
-                    <span> 15 results</span>
+                    <span> {totalService} results</span>
 
                     <select
                         className="border rounded-full px-5 py-2 outline-none"
                         name="orderby"
                         aria-label="Shop order"
+                        value={sortPrice}
+                        onChange={(e) => setSortPrice(e.target.value)}
                     >
-                        <option value="menu_order" selected="selected">
-                            Default sorting
-                        </option>
-                        <option value="popularity">Sort by popularity</option>
-                        <option value="rating">Sort by average rating</option>
-                        <option value="date">Sort by latest</option>
-                        <option value="price">
+                        <option value="menu_order">Default sorting</option>
+                        <option value="low-to-high">
                             Sort by price: low to high
                         </option>
-                        <option value="price-desc">
+                        <option value="high-to-low">
                             Sort by price: high to low
                         </option>
                     </select>
                 </div>
                 <div className="grid grid-cols-1 gap-[20px]">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                        <div key={i}>
-                            <Service />
+                    {services.map((s) => (
+                        <div key={s._id}>
+                            <Service
+                                images={s.images}
+                                name={s.name}
+                                desc={s.long_description}
+                                price={s.price}
+                                discount={s.discount}
+                                short_desc={s.short_description}
+                            />
                         </div>
                     ))}
+                </div>
+                <div className="flex justify-center mt-9">
+                    {totalService > parPage && (
+                        <Pagination
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            totalItem={totalService}
+                            parPage={parPage}
+                            showItem={Math.floor(totalService / parPage)}
+                        />
+                    )}
                 </div>
             </div>
         </section>

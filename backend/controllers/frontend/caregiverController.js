@@ -129,7 +129,10 @@ class categoryController {
                 .findOne({
                     caregiverId: userId,
                 })
-                .populate("caregiverId")
+                .populate({
+                    path: "caregiverId",
+                    select: "-password ",
+                })
                 .exec();
             responseReturn(res, 200, { caregiverProfile });
         } catch (error) {

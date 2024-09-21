@@ -30,6 +30,10 @@ app.use("/api", require("./routes/serviceRoutes"));
 //Frontend
 app.use("/api", require("./routes/frontend/caregiverRoutes"));
 app.use("/api", require("./routes/frontend/authRoutes"));
+app.use("/api", require("./routes/frontend/homeRoutes"));
+app.use("/api", require("./routes/frontend/cartRoutes"));
+
+app.use("/api", require("./routes/orderRoutes"));
 
 app.get("/", (req, res) => res.send("My backend"));
 

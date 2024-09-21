@@ -43,7 +43,8 @@ const AddService = () => {
         price: "",
         category: "",
         discount: "",
-        description: "",
+        short_description: "",
+        long_description: "",
     });
 
     const navigate = useNavigate();
@@ -140,7 +141,8 @@ const AddService = () => {
                 price: service.price,
                 category: service.category,
                 discount: service.discount,
-                description: service.description,
+                long_description: service.long_description,
+                short_description: service.short_description,
             });
 
             const imagesArray = Array.isArray(service.images)
@@ -163,7 +165,8 @@ const AddService = () => {
             formData.append("category", state.category);
             formData.append("price", state.price);
             formData.append("discount", state.discount);
-            formData.append("description", state.description);
+            formData.append("long_description", state.long_description);
+            formData.append("short_description", state.short_description);
 
             images.forEach((cert) => {
                 if (
@@ -183,7 +186,8 @@ const AddService = () => {
             formData.append("category", state.category);
             formData.append("price", state.price);
             formData.append("discount", state.discount);
-            formData.append("description", state.description);
+            formData.append("long_description", state.long_description);
+            formData.append("short_description", state.short_description);
 
             for (let i = 0; i < images.length; i++) {
                 formData.append("images", images[i]);
@@ -401,30 +405,57 @@ const AddService = () => {
                                 />
                             </div>
                         </div>
-                        <div className="flex flex-col  text-black w-full gap-1 mb-3 mt-5">
-                            <label
-                                className="font-bold text-white"
-                                htmlFor="long_description"
-                            >
-                                Description:
-                            </label>
-                            <JoditEditor
-                                ref={editor}
-                                value={state.description}
-                                onChange={(newContent) =>
-                                    setState({
-                                        ...state,
-                                        description: newContent,
-                                    })
-                                }
-                                style={{ height: "400px" }}
-                            />
-                            {errors.description && (
-                                <span className="text-red-300 flex items-center gap-[10px] pt-1 font-semibold text-sm">
-                                    <BiSolidError />
-                                    {errors.description}
-                                </span>
-                            )}
+                        <div>
+                            <div className="flex flex-col  text-black w-full gap-1 mb-3 mt-5">
+                                <label
+                                    className="font-bold text-white"
+                                    htmlFor="short_description"
+                                >
+                                    Short Description:
+                                </label>
+                                <JoditEditor
+                                    ref={editor}
+                                    value={state.short_description}
+                                    onChange={(newContent) =>
+                                        setState({
+                                            ...state,
+                                            short_description: newContent,
+                                        })
+                                    }
+                                    style={{ height: "400px" }}
+                                />
+                                {errors.short_description && (
+                                    <span className="text-red-300 flex items-center gap-[10px] pt-1 font-semibold text-sm">
+                                        <BiSolidError />
+                                        {errors.short_description}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex flex-col  text-black w-full gap-1 mb-3 mt-5">
+                                <label
+                                    className="font-bold text-white"
+                                    htmlFor="long_description"
+                                >
+                                    Long Description:
+                                </label>
+                                <JoditEditor
+                                    ref={editor}
+                                    value={state.long_description}
+                                    onChange={(newContent) =>
+                                        setState({
+                                            ...state,
+                                            long_description: newContent,
+                                        })
+                                    }
+                                    style={{ height: "400px" }}
+                                />
+                                {errors.long_description && (
+                                    <span className="text-red-300 flex items-center gap-[10px] pt-1 font-semibold text-sm">
+                                        <BiSolidError />
+                                        {errors.long_description}
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
 

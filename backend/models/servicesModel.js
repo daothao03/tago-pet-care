@@ -33,7 +33,11 @@ const serviceSchema = new Schema(
             min: 0,
             max: 100,
         },
-        description: {
+        short_description: {
+            type: String,
+            required: true,
+        },
+        long_description: {
             type: String,
             required: true,
         },

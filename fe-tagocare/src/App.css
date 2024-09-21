@@ -57,3 +57,10 @@ body {
 .form-group input:focus {
     outline: none;
 }
+
+/* Thêm vào tệp CSS của bạn */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

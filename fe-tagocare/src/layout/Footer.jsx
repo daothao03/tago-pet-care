@@ -1,8 +1,24 @@
 import { FaFacebook, FaInstagram, FaPhone, FaTiktok } from "react-icons/fa";
 import logo from "../assets/images/Remove-bg.ai_1724425793461.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+    const { userInfo } = useSelector((state) => state.auth);
+    const { caregiver } = useSelector((state) => state.caregiver);
+
+    const navigate = useNavigate();
+
+    const handleSellerChannelClick = () => {
+        if (userInfo && caregiver === null) {
+            navigate("/register-caregiver");
+        } else if (userInfo && caregiver !== null) {
+            window.location.href = "http://localhost:5174/login";
+        } else {
+            navigate("/login");
+        }
+    };
+
     return (
         <footer className="container mt-[150px] grid grid-cols-3 mb-[50px]">
             <div>
@@ -44,6 +60,9 @@ const Footer = () => {
                     </Link>
                     <li className="mb-2">Shipping Policy</li>
                     <li className="mb-2">FAQ</li>
+                    <li onClick={handleSellerChannelClick} className="mb-2">
+                        Caregiver Channel
+                    </li>
                 </ul>
             </div>
             <div>
