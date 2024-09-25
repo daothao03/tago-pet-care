@@ -38,4 +38,17 @@ const authSchema = new Schema(
     { timestamps: true }
 );
 
+authSchema.index(
+    {
+        orderId: "text",
+        caregiverId: "text",
+    },
+    {
+        weights: {
+            orderId: 5,
+            caregiverId: 4,
+        },
+    }
+);
+
 module.exports = model("authorOrders", authSchema);

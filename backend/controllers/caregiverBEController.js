@@ -15,43 +15,91 @@ class caregiverBEController {
         const skipPage = parseInt(parPage) * (parseInt(currentPage) - 1);
 
         try {
+            const query = {
+                isCaregiver: true,
+                status: "pending",
+                role: { $in: ["caregiver"] },
+            };
+
             if (searchValue) {
-                const caregivers = await userModel
-                    .find({
-                        isCaregiver: true,
-                        status: "pending",
-                        $text: searchValue,
-                    })
-                    .skip(skipPage)
-                    .limit(parPage)
-                    .sort({ createdAt: -1 });
-                const totalCaregiver = await userModel
-                    .find({
-                        isCaregiver: true,
-                        $text: searchValue,
-                    })
-                    .countDocuments();
-
-                responseReturn(res, 200, { caregivers, totalCaregiver });
-            } else {
-                const caregivers = await userModel
-                    .find({
-                        isCaregiver: true,
-                        status: "pending",
-                    })
-                    .skip(skipPage)
-                    .limit(parPage)
-                    .sort({ createdAt: -1 });
-                const totalCaregiver = await userModel
-                    .find({
-                        isCaregiver: true,
-                    })
-                    .countDocuments();
-
-                responseReturn(res, 200, { caregivers, totalCaregiver });
+                query.$text = { $search: searchValue };
             }
+
+            const caregivers = await userModel
+                .find(query)
+                .skip(skipPage)
+                .limit(parseInt(parPage))
+                .sort({ createdAt: -1 });
+
+            const totalCaregiver = await userModel.countDocuments(query);
+
+            responseReturn(res, 200, { caregivers, totalCaregiver });
         } catch (error) {
             console.log(error.message);
+            responseReturn(res, 500, { message: "Internal Server Error" });
+        }
+    };
+
+    get_caregiver_deactive = async (req, res) => {
+        const { parPage, currentPage, searchValue } = req.query;
+
+        const skipPage = parseInt(parPage) * (parseInt(currentPage) - 1);
+
+        try {
+            const query = {
+                isCaregiver: true,
+                status: "inactive",
+                role: { $in: ["caregiver"] },
+            };
+
+            if (searchValue) {
+                query.$text = { $search: searchValue };
+            }
+
+            const caregivers = await userModel
+                .find(query)
+                .skip(skipPage)
+                .limit(parseInt(parPage))
+                .sort({ createdAt: -1 });
+
+            const totalCaregiver = await userModel.countDocuments(query);
+
+            responseReturn(res, 200, { caregivers, totalCaregiver });
+        } catch (error) {
+            console.log(error.message);
+            responseReturn(res, 500, { message: "Internal Server Error" });
+        }
+    };
+
+    get_caregiver_active = async (req, res) => {
+        const { parPage = 10, currentPage = 1, searchValue } = req.query;
+
+        const limit = parseInt(parPage);
+        const skip = limit * (parseInt(currentPage) - 1);
+
+        try {
+            const query = {
+                isCaregiver: true,
+                status: "active",
+                role: { $in: ["caregiver"] },
+            };
+
+            if (searchValue) {
+                query.$text = { $search: searchValue };
+            }
+
+            const caregivers = await userModel
+                .find(query)
+                .skip(skip)
+                .limit(limit)
+                .sort({ createdAt: -1 });
+
+            const totalCaregiver = await userModel.countDocuments(query);
+
+            responseReturn(res, 200, { caregivers, totalCaregiver });
+        } catch (error) {
+            console.log(error.message);
+            responseReturn(res, 500, { message: "Internal Server Error" });
         }
     };
 

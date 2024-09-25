@@ -110,6 +110,79 @@ class orderController {
             console.log(error.message);
         }
     };
+
+    get_caregiver_orders = async (req, res) => {
+        const { currentPage, parPage, searchValue } = req.query;
+        const { caregiverId } = req.params;
+
+        const skipPage = parseInt(parPage) * (parseInt(currentPage) - 1);
+
+        try {
+            const query = {
+                caregiverId: caregiverId,
+            };
+
+            if (searchValue) {
+                query.$text = { $search: searchValue };
+            }
+
+            const orders = await authOrderModel
+                .find(query)
+                .skip(skipPage)
+                .limit(parseInt(parPage))
+                .sort({ createdAt: -1 });
+
+            const totalOrder = await authOrderModel.countDocuments(query);
+
+            responseReturn(res, 200, { orders, totalOrder });
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    get_orderP_detail = async (req, res) => {
+        const { orderId } = req.params;
+
+        try {
+            const orderDetails = await authOrderModel.aggregate([
+                {
+                    $match: { _id: new ObjectId(orderId) },
+                },
+                {
+                    $lookup: {
+                        from: "customerorders",
+                        localField: "orderId",
+                        foreignField: "_id",
+                        as: "customerOrderDetails",
+                    },
+                },
+                {
+                    $unwind: "$customerOrderDetails",
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        sellerId: 1,
+                        products: 1,
+                        price: 1,
+                        payment_status: 1,
+                        delivery_status: 1,
+                        shippingInfo: "$customerOrderDetails.shippingInfo",
+                        date: 1,
+                    },
+                },
+            ]);
+
+            if (!orderDetails.length) {
+                return res.status(404).json({ message: "Order not found" });
+            }
+
+            responseReturn(res, 200, { order: orderDetails[0] });
+        } catch (error) {
+            console.log("get seller details error: " + error.message);
+            res.status(500).json({ message: "Server error" });
+        }
+    };
 }
 
 module.exports = new orderController();

@@ -25,6 +25,48 @@ export const caregiver_request = createAsyncThunk(
     }
 );
 
+export const caregiver_deactive = createAsyncThunk(
+    "caregiver/caregiver_deactive",
+    async (
+        { currentPage, parPage, searchValue },
+        { rejectWithValue, fulfillWithValue }
+    ) => {
+        try {
+            const { data } = await api.get(
+                `/get-caregiver-deactive?parPage=${parPage}&&currentPage=${currentPage}&&searchValue=${searchValue}`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            return fulfillWithValue(data);
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const caregiver_active = createAsyncThunk(
+    "caregiver/caregiver_active",
+    async (
+        { currentPage, parPage, searchValue },
+        { rejectWithValue, fulfillWithValue }
+    ) => {
+        try {
+            const { data } = await api.get(
+                `/get-caregiver-active?parPage=${parPage}&&currentPage=${currentPage}&&searchValue=${searchValue}`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            return fulfillWithValue(data);
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const caregiver_info = createAsyncThunk(
     "caregiver/caregiver_info",
     async (careId, { rejectWithValue, fulfillWithValue }) => {
@@ -114,6 +156,14 @@ export const caregiverReducer = createSlice({
                 state.successMessage = payload.message;
             })
             .addCase(caregiver_request.fulfilled, (state, { payload }) => {
+                state.caregivers = payload.caregivers;
+                state.totalCaregiver = payload.totalCaregiver;
+            })
+            .addCase(caregiver_deactive.fulfilled, (state, { payload }) => {
+                state.caregivers = payload.caregivers;
+                state.totalCaregiver = payload.totalCaregiver;
+            })
+            .addCase(caregiver_active.fulfilled, (state, { payload }) => {
                 state.caregivers = payload.caregivers;
                 state.totalCaregiver = payload.totalCaregiver;
             })

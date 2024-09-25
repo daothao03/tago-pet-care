@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import AddService from "../../views/CareGivers/AddService";
+import OrdersProductDetail from "../../views/CareGivers/OrdersProductDetail";
 
 const EditPassword = lazy(() => import("../../views/CareGivers/EditPassword"));
 const ChatCustomer = lazy(() => import("../../views/CareGivers/ChatCustomer"));
@@ -58,6 +59,13 @@ export const caregiverRoutes = [
     {
         path: "/caregiver/pet-product-orders",
         element: <PetProductOrders />,
+        role: "caregiver",
+        status: "active",
+        visibility: ["active", "inactive"],
+    },
+    {
+        path: "/caregiver/order-detail/:orderId",
+        element: <OrdersProductDetail />,
         role: "caregiver",
         status: "active",
         visibility: ["active", "inactive"],

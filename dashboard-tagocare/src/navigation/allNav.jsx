@@ -20,6 +20,13 @@ export const allNav = [
         path: "/admin/dashboard",
     },
     {
+        id: 17,
+        title: "Orders",
+        icon: <FaRocketchat />,
+        role: "admin",
+        path: "/admin/orders",
+    },
+    {
         id: 2,
         title: "Category",
         icon: <BiCategoryAlt />,

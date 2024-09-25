@@ -1,5 +1,7 @@
 import { lazy } from "react";
 import CaregiverDetails from "../../views/admin/CaregiverDetails";
+import Orders from "../../views/admin/Orders";
+import OrderDetail from "../../views/admin/OrderDetail";
 
 const LiveChat = lazy(() => import("../../views/admin/LiveChat"));
 const AdminDashboard = lazy(() => import("../../views/admin/AdminDashboard"));
@@ -57,6 +59,16 @@ export const adminRoutes = [
     {
         path: "/admin/caregiver/caregiver-details/:careId",
         element: <CaregiverDetails />,
+        role: "admin",
+    },
+    {
+        path: "/admin/orders",
+        element: <Orders />,
+        role: "admin",
+    },
+    {
+        path: "/admin/order/order-detail/:orderId",
+        element: <OrderDetail />,
         role: "admin",
     },
 ];

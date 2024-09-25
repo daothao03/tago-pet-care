@@ -77,7 +77,7 @@ const CaregiverDetails = () => {
                             Status
                         </h4>
                         <select
-                            value={caregiver.status}
+                            value={caregiver.caregiverId?.status}
                             onChange={(e) => handleChangeStatus(e.target.value)}
                             className=" bg-transparent border focus:outline-none p-1 rounded-full mr-1"
                         >

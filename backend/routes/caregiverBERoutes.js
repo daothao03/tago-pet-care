@@ -9,6 +9,18 @@ router.get(
     caregiverBEController.get_caregiver_request
 );
 router.get(
+    "/get-caregiver-deactive",
+    authMiddleware,
+    caregiverBEController.get_caregiver_deactive
+);
+
+router.get(
+    "/get-caregiver-active",
+    authMiddleware,
+    caregiverBEController.get_caregiver_active
+);
+
+router.get(
     "/get-caregiver-info/:careId",
     authMiddleware,
     caregiverBEController.get_caregiver_info
