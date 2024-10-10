@@ -24,7 +24,6 @@ const AllServices = () => {
     const [sortPrice, setSortPrice] = useState("");
     const [category, setCategory] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -153,12 +152,14 @@ const AllServices = () => {
                     {services.map((s) => (
                         <div key={s._id}>
                             <Service
+                                slug={s.slug}
                                 images={s.images}
                                 name={s.name}
                                 desc={s.long_description}
                                 price={s.price}
                                 discount={s.discount}
                                 short_desc={s.short_description}
+                                time={s.complete_time}
                             />
                         </div>
                     ))}

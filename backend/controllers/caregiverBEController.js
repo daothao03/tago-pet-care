@@ -165,6 +165,7 @@ class caregiverBEController {
                 careId,
                 oldImage,
                 oldProfileImage,
+                numberEmployee,
             } = fields;
 
             let { newImage, newProfileImage } = files;
@@ -325,6 +326,7 @@ class caregiverBEController {
                         introduce,
                         experience,
                         shopName,
+                        numberEmployee,
                         certificates: finalCertificates,
                     }
                 );

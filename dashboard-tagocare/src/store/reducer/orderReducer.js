@@ -38,6 +38,26 @@ export const get_orderProduct_detail = createAsyncThunk(
     }
 );
 
+export const get_caregiver_orders_service = createAsyncThunk(
+    "caregiver/get_caregiver_orders_service",
+    async (
+        { parPage, currentPage, searchValue, caregiverId },
+        { rejectWithValue, fulfillWithValue }
+    ) => {
+        try {
+            const { data } = await api.get(
+                `/caregiver/get-caregiver-orders-service/${caregiverId}?currentPage=${currentPage}&&searchValue=${searchValue}&&parPage=${parPage}`,
+                {
+                    withCredentials: true,
+                }
+            );
+            return fulfillWithValue(data);
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const orderReducer = createSlice({
     name: "order",
     initialState: {
@@ -47,6 +67,9 @@ export const orderReducer = createSlice({
         orders: [],
         order: {},
         totalOrder: 0,
+        ordersService: [],
+        orderService: {},
+        totalOrderService: 0,
     },
     reducers: {
         messageClear: (state) => {
@@ -63,6 +86,13 @@ export const orderReducer = createSlice({
                 get_orderProduct_detail.fulfilled,
                 (state, { payload }) => {
                     state.order = payload.order;
+                }
+            )
+            .addCase(
+                get_caregiver_orders_service.fulfilled,
+                (state, { payload }) => {
+                    state.ordersService = payload.orders;
+                    state.totalOrderService = payload.totalOrderService;
                 }
             );
 

@@ -1,8 +1,8 @@
 const { Schema, model } = require("mongoose");
 
-const authSchema = new Schema(
+const authServiceOrder = new Schema(
     {
-        orderId: {
+        orderServiceId: {
             type: Schema.ObjectId,
             required: true,
         },
@@ -10,8 +10,8 @@ const authSchema = new Schema(
             type: Schema.ObjectId,
             required: true,
         },
-        products: {
-            type: Array,
+        service: {
+            type: Object,
             required: true,
         },
         price: {
@@ -20,13 +20,29 @@ const authSchema = new Schema(
         },
         payment_status: {
             type: String,
+            default: "pending",
+        },
+        service_status: {
+            type: String,
+            default: "pending",
+        },
+        // days: {
+        //     type: Number,
+        //     required: true,
+        // },
+        startDate: {
+            type: Date,
             required: true,
         },
-        delivery_status: {
+        endDate: {
+            type: Date,
+            required: true,
+        },
+        startTime: {
             type: String,
             required: true,
         },
-        date: {
+        endTime: {
             type: String,
             required: true,
         },
@@ -34,17 +50,4 @@ const authSchema = new Schema(
     { timestamps: true }
 );
 
-authSchema.index(
-    {
-        orderId: "text",
-        caregiverId: "text",
-    },
-    {
-        weights: {
-            orderId: 5,
-            caregiverId: 4,
-        },
-    }
-);
-
-module.exports = model("authorOrders", authSchema);
+module.exports = model("authServiceOrder", authServiceOrder);

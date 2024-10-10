@@ -53,6 +53,10 @@ const serviceSchema = new Schema(
             type: Number,
             default: 0,
         },
+        complete_time: {
+            type: Number,
+            required: true,
+        },
     },
     { timestamps: true }
 );

@@ -7,6 +7,9 @@ const {
 const customerOrderModel = require("../models/customerOrderModel");
 const authOrderModel = require("../models/authOrderModel");
 const cartModel = require("../models/cartModel");
+const customerOrderServiceModel = require("../models/customerOrderServiceModel");
+const authOrderServiceModel = require("../models/authOrderServiceModel");
+const caregiverProfileModel = require("../models/caregiverProfileModel");
 
 class orderController {
     paymentCheck = async (id) => {
@@ -140,6 +143,36 @@ class orderController {
         }
     };
 
+    get_caregiver_orders_service = async (req, res) => {
+        const { currentPage, parPage, searchValue } = req.query;
+        const { caregiverId } = req.params;
+
+        const skipPage = parseInt(parPage) * (parseInt(currentPage) - 1);
+
+        try {
+            const query = {
+                caregiverId: caregiverId,
+            };
+
+            if (searchValue) {
+                query.$text = { $search: searchValue };
+            }
+
+            const orders = await authOrderServiceModel
+                .find(query)
+                .skip(skipPage)
+                .limit(parseInt(parPage))
+                .sort({ createdAt: -1 });
+
+            const totalOrderService =
+                await authOrderServiceModel.countDocuments(query);
+
+            responseReturn(res, 200, { orders, totalOrderService });
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
     get_orderP_detail = async (req, res) => {
         const { orderId } = req.params;
 
@@ -181,6 +214,138 @@ class orderController {
         } catch (error) {
             console.log("get seller details error: " + error.message);
             res.status(500).json({ message: "Server error" });
+        }
+    };
+
+    paymentServiceCheck = async (id) => {
+        try {
+            const order = await customerOrderServiceModel.findById(id);
+            if (order.payment_status === "unpaid") {
+                await customerOrderServiceModel.findByIdAndUpdate(id, {
+                    service_status: "cancelled",
+                });
+                await authOrderServiceModel.findOneAndUpdate(
+                    { orderServiceId: id },
+                    { service_status: "cancelled" }
+                );
+            }
+            return true;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    place_order_service = async (req, res) => {
+        const {
+            price,
+            service,
+            userId,
+            petType,
+            startTime,
+            endTime,
+            address,
+            startDate,
+            endDate,
+            days,
+            serviceType,
+        } = req.body;
+
+        try {
+            const caregiverProfile = await caregiverProfileModel.findOne({
+                caregiverId: service.caregiverId,
+            });
+
+            if (!caregiverProfile) {
+                responseReturn(res, 400, {
+                    message: "Caregiver not found",
+                });
+            }
+
+            const numberOfEmployees = caregiverProfile.numberEmployee;
+
+            // Kiểm tra xem đã có bao nhiêu booking trong cùng ngày và khung giờ
+            const overlappingBookings =
+                await authOrderServiceModel.countDocuments({
+                    caregiverId: service.caregiverId,
+                    startDate: { $lte: endDate },
+                    endDate: { $gte: startDate },
+                    startTime: { $lte: endTime },
+                    endTime: { $gte: startTime },
+                });
+
+            // Nếu số booking trùng giờ vượt quá số lượng nhân viên thì từ chối đặt dịch vụ
+            if (overlappingBookings >= numberOfEmployees) {
+                responseReturn(res, 400, {
+                    message:
+                        "The caregiver is fully booked for the selected time, Please choose a different time",
+                });
+            } else {
+                const co = 5;
+                const orderService = await customerOrderServiceModel.create({
+                    customerId: userId,
+                    service,
+                    price: price * days,
+                    petType,
+                    startDate,
+                    endDate,
+                    startTime,
+                    endTime,
+                    serviceType,
+                    address,
+                    payment_status: "unpaid",
+                    service_status: "pending",
+                });
+
+                await authOrderServiceModel.create({
+                    orderServiceId: orderService.id,
+                    caregiverId: service.caregiverId,
+                    service,
+                    price: price * days - Math.floor(price * days * co) / 100,
+                    startDate,
+                    endDate,
+                    startTime,
+                    endTime,
+                    payment_status: "unpaid",
+                    service_status: "pending",
+                });
+
+                setTimeout(() => {
+                    this.paymentServiceCheck(orderService.id);
+                }, 1000);
+
+                responseReturn(res, 200, {
+                    message: "Order Successfully",
+                    orderServiceId: orderService.id,
+                    service: orderService.service,
+                    price: orderService.price,
+                });
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    get_order_by_user = async (req, res) => {
+        const { customerId, status } = req.params;
+
+        try {
+            let myOrdersService = [];
+            if (status !== "all") {
+                myOrdersService = await customerOrderServiceModel.find({
+                    customerId: new ObjectId(customerId),
+                    service_status: status,
+                });
+            } else {
+                myOrdersService = await customerOrderServiceModel.find({
+                    customerId: new ObjectId(customerId),
+                });
+            }
+
+            responseReturn(res, 200, {
+                myOrdersService,
+            });
+        } catch (error) {
+            console.log(error.message);
         }
     };
 }

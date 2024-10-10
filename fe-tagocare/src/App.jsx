@@ -22,6 +22,7 @@ import RegisterCaregiver from "./pages/RegisterCaregiver";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { get_categories } from "./store/reducer/homeReducer";
+import ServiceDetail from "./pages/ServiceDetail";
 
 function App() {
     const dispatch = useDispatch();
@@ -40,6 +41,10 @@ function App() {
                 />
                 <Route path="/products" element={<Products />} />
                 <Route path="/services" element={<Services />} />
+                <Route
+                    path="/service/detail/:slug"
+                    element={<ServiceDetail />}
+                />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/payment" element={<Payment />} />

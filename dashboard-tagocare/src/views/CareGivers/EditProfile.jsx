@@ -37,6 +37,7 @@ const EditProfile = () => {
         experience: "",
         shopName: "",
         image: "",
+        numberEmployee: 1,
     });
 
     const [images, setImages] = useState([]);
@@ -128,6 +129,7 @@ const EditProfile = () => {
                 introduce: caregiver.introduce || "",
                 experience: caregiver.experience,
                 shopName: caregiver.shopName || "",
+                numberEmployee: caregiver.numberEmployee || "",
             });
             const serviceAreaArray = Array.isArray(caregiver.serviceArea)
                 ? caregiver.serviceArea
@@ -157,6 +159,7 @@ const EditProfile = () => {
         formData.append("introduce", state.introduce);
         formData.append("experience", state.experience);
         formData.append("shopName", state.shopName);
+        formData.append("numberEmployee", state.numberEmployee);
         formData.append(
             "oldProfileImage",
             caregiver.caregiverId?.image !== ""
@@ -367,6 +370,28 @@ const EditProfile = () => {
                                 {errors.address && (
                                     <span className="text-red-300 flex items-center gap-[10px] pt-1 font-semibold text-sm">
                                         <BiSolidError /> {errors.address}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex flex-col w-full gap-1 mb-3">
+                                <label
+                                    className="font-bold"
+                                    htmlFor="numberEmployee"
+                                >
+                                    Number of employees
+                                </label>
+                                <input
+                                    value={state.numberEmployee}
+                                    onChange={handleState}
+                                    className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#ffffff] border border-slate-700 rounded-md text-[#000000]"
+                                    type="text"
+                                    id="numberEmployee"
+                                    name="numberEmployee"
+                                    placeholder="Number of employees"
+                                />
+                                {errors.numberEmployee && (
+                                    <span className="text-red-300 flex items-center gap-[10px] pt-1 font-semibold text-sm">
+                                        <BiSolidError /> {errors.numberEmployee}
                                     </span>
                                 )}
                             </div>

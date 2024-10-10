@@ -45,6 +45,7 @@ const AddService = () => {
         discount: "",
         short_description: "",
         long_description: "",
+        complete_time: 30,
     });
 
     const navigate = useNavigate();
@@ -143,6 +144,7 @@ const AddService = () => {
                 discount: service.discount,
                 long_description: service.long_description,
                 short_description: service.short_description,
+                complete_time: service.complete_time,
             });
 
             const imagesArray = Array.isArray(service.images)
@@ -167,6 +169,7 @@ const AddService = () => {
             formData.append("discount", state.discount);
             formData.append("long_description", state.long_description);
             formData.append("short_description", state.short_description);
+            formData.append("complete_time", state.complete_time);
 
             images.forEach((cert) => {
                 if (
@@ -188,6 +191,7 @@ const AddService = () => {
             formData.append("discount", state.discount);
             formData.append("long_description", state.long_description);
             formData.append("short_description", state.short_description);
+            formData.append("complete_time", state.complete_time);
 
             for (let i = 0; i < images.length; i++) {
                 formData.append("images", images[i]);
@@ -354,6 +358,26 @@ const AddService = () => {
                                         </span>
                                     )}
                                 </div>
+                            </div>
+                            <div className="flex flex-col w-full gap-1 mb-3 ">
+                                <label className="font-bold" htmlFor="name">
+                                    Complete time:
+                                </label>
+                                <input
+                                    value={state.complete_time}
+                                    onChange={inputHandle}
+                                    className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#ffffff] border border-slate-700 rounded-md text-[#000000]"
+                                    type="text"
+                                    id="complete_time"
+                                    name="complete_time"
+                                    placeholder=" Complete_time"
+                                />
+
+                                {errors.complete_time && (
+                                    <span className="text-red-300 flex items-center gap-[10px] pt-1 font-semibold text-sm">
+                                        <BiSolidError /> {errors.complete_time}
+                                    </span>
+                                )}
                             </div>
                             <div className="grid lg:grid-cols-2 mt-3 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-[#d0d2d6] mb-4">
                                 {imageShow.map((img, i) => (

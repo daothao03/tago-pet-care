@@ -127,6 +127,17 @@ class homeController {
             console.log(error.message);
         }
     };
+
+    get_service_details = async (req, res) => {
+        const { slug } = req.params;
+
+        try {
+            const service = await servicesModel.findOne({ slug: slug });
+            responseReturn(res, 200, { service });
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
 }
 
 module.exports = new homeController();

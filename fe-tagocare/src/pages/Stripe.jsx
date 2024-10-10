@@ -33,7 +33,7 @@ const Stripe = ({ price, orderId }) => {
     };
 
     return (
-        <div className="mt-4">
+        <div className="mt-4 flex justify-center">
             {clientSecret ? (
                 <Elements options={options} stripe={stripePromise}>
                     <CheckoutForm orderId={orderId} />
@@ -41,7 +41,7 @@ const Stripe = ({ price, orderId }) => {
             ) : (
                 <button
                     onClick={create_payment}
-                    className="px-10 py-[6px] rounded-tl-3xl rounded-tr-3xl hover:shadow-green-700/30 hover:shadow-lg bg-green-700 text-white rounded-sm "
+                    className="flex text-[13px] text-white cursor-pointer items-center gap-2 font-bold border-[3px] px-4 rounded-full rounded-tl-3xl py-1 bg-[#ed6436]"
                 >
                     Start Payment
                 </button>

@@ -56,6 +56,19 @@ export const query_services = createAsyncThunk(
     }
 );
 
+export const get_service_details = createAsyncThunk(
+    "service/get_service_details",
+    async (slug, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get(`/home/get-service-details/${slug}`);
+
+            return fulfillWithValue(data);
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const homeReducer = createSlice({
     name: "home",
     initialState: {
@@ -85,6 +98,9 @@ export const homeReducer = createSlice({
         builder
             .addCase(get_categories.fulfilled, (state, { payload }) => {
                 state.categories = payload.categories;
+            })
+            .addCase(get_service_details.fulfilled, (state, { payload }) => {
+                state.service = payload.service;
             })
             .addCase(price_range_product.fulfilled, (state, { payload }) => {
                 state.priceRange = payload.priceRange;

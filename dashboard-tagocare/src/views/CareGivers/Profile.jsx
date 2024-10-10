@@ -92,6 +92,12 @@ const Profile = () => {
                             </div>
                         </div>
 
+                        <div className="mt-5 px-3 py-2 rounded-md gap-[30px] bg-second">
+                            <span className="mt-1 font-semibold">
+                                Number of Employee: {caregiver.numberEmployee}
+                            </span>
+                        </div>
+
                         <div className="mt-5 bg-second px-3 py-2 rounded-md flex flex-col">
                             <span className=" font-roboto  font-bold">
                                 Status: {caregiver.caregiverId?.status}

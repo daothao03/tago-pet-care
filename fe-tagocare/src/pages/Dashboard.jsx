@@ -70,7 +70,7 @@ const Dashboard = () => {
                                         to="/dashboard/my-orders"
                                         className="block"
                                     >
-                                        My Orders
+                                        My Orders Service
                                     </Link>
                                 </li>
                                 <li className="flex justify-start items-center gap-2 py-2">

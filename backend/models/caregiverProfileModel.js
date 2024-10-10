@@ -44,6 +44,10 @@ const caregiverProfileSchema = new Schema(
             type: Array,
             required: true,
         },
+        numberEmployee: {
+            type: Number,
+            default: 1,
+        },
     },
     { timestamps: true }
 );

@@ -26,6 +26,7 @@ class serviceController {
                     discount,
                     short_description,
                     long_description,
+                    complete_time,
                 } = fields;
                 let { images } = files;
 
@@ -66,6 +67,9 @@ class serviceController {
                     errors.discount =
                         "The value must be greater than 0 or less than 100";
                 }
+                if (complete_time < 0) {
+                    errors.complete_time = "The value must be greater than 0 ";
+                }
                 if (!images || (Array.isArray(images) && images.length === 0)) {
                     errors.images = "No images provided";
                 }
@@ -99,6 +103,7 @@ class serviceController {
                         discount,
                         short_description,
                         long_description,
+                        complete_time,
                         slug: slugify(name),
                         images: allImageUrl,
                     });
@@ -192,6 +197,7 @@ class serviceController {
                 short_description,
                 long_description,
                 oldImage,
+                complete_time,
             } = fields;
             let { newImage } = files;
 
@@ -220,6 +226,9 @@ class serviceController {
                 errors.discount = "Discount is required";
             } else if (isNaN(discount)) {
                 errors.discount = "Discount must be a number";
+            }
+            if (complete_time < 0) {
+                errors.complete_time = "The value must be greater than 0 ";
             }
             if (discount < 0 || discount > 100) {
                 errors.discount =
@@ -303,6 +312,7 @@ class serviceController {
                     price,
                     short_description,
                     long_description,
+                    complete_time,
                     images: finalImage,
                 });
                 responseReturn(res, 200, { message: "Updated Successfully" });

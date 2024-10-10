@@ -20,7 +20,7 @@ const HeaderPageCommon = ({
                 </p>
                 {showBookNow && (
                     <img
-                        className="absolute cursor-pointer left-0 bottom-2 z-10 transition-transform duration-500 ease-in-out hover:rotate-30"
+                        className="absolute cursor-pointer left-0 -bottom-3 z-10 transition-transform duration-500 ease-in-out hover:rotate-30"
                         src={bookNow}
                         alt=""
                     />
