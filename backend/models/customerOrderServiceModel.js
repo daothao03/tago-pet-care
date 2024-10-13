@@ -31,11 +31,11 @@ const serviceOrderSchema = new Schema(
         //     required: true,
         // },
         startDate: {
-            type: Date, // Ngày bắt đầu
+            type: String,
             required: true,
         },
         endDate: {
-            type: Date,
+            type: String,
             required: true,
         },
         startTime: {

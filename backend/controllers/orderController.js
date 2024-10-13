@@ -10,6 +10,8 @@ const cartModel = require("../models/cartModel");
 const customerOrderServiceModel = require("../models/customerOrderServiceModel");
 const authOrderServiceModel = require("../models/authOrderServiceModel");
 const caregiverProfileModel = require("../models/caregiverProfileModel");
+const myShopWallet = require("../models/myShopWallet");
+const caregiverWallet = require("../models/caregiverWallet");
 
 class orderController {
     paymentCheck = async (id) => {
@@ -217,6 +219,59 @@ class orderController {
         }
     };
 
+    get_orderS_detail = async (req, res) => {
+        const { orderServiceId } = req.params;
+
+        try {
+            const orderDetails = await authOrderServiceModel.aggregate([
+                {
+                    $match: { _id: new ObjectId(orderServiceId) },
+                },
+                {
+                    $lookup: {
+                        from: "serviceorders", // Đảm bảo tên collection chính xác
+                        localField: "orderServiceId",
+                        foreignField: "_id",
+                        as: "serviceOrdersDetail",
+                    },
+                },
+                {
+                    $unwind: {
+                        path: "$serviceOrdersDetail",
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        caregiverId: 1,
+                        service: 1,
+                        price: 1,
+                        payment_status: 1,
+                        service_status: 1,
+                        address: "$serviceOrdersDetail.address",
+                        petType: "$serviceOrdersDetail.petType",
+                        travel_fee: "$serviceOrdersDetail.travel_fee",
+                        startDate: "$serviceOrdersDetail.startDate",
+                        endDate: "$serviceOrdersDetail.endDate",
+                        startTime: "$serviceOrdersDetail.startTime",
+                        endTime: "$serviceOrdersDetail.endTime",
+                        serviceType: "$serviceOrdersDetail.serviceType",
+                    },
+                },
+            ]);
+
+            if (!orderDetails.length) {
+                return res.status(404).json({ message: "Order not found" });
+            }
+
+            responseReturn(res, 200, { orderService: orderDetails[0] });
+        } catch (error) {
+            console.log("get order details error: " + error.message);
+            res.status(500).json({ message: "Server error" });
+        }
+    };
+
     paymentServiceCheck = async (id) => {
         try {
             const order = await customerOrderServiceModel.findById(id);
@@ -311,7 +366,7 @@ class orderController {
 
                 setTimeout(() => {
                     this.paymentServiceCheck(orderService.id);
-                }, 1000);
+                }, 24 * 60 * 60 * 1000);
 
                 responseReturn(res, 200, {
                     message: "Order Successfully",
@@ -344,6 +399,49 @@ class orderController {
             responseReturn(res, 200, {
                 myOrdersService,
             });
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    order_confirm = async (req, res) => {
+        const { orderId } = req.params;
+        try {
+            await customerOrderServiceModel.findByIdAndUpdate(orderId, {
+                payment_status: "paid",
+            });
+            await authOrderServiceModel.updateMany(
+                { orderServiceId: new ObjectId(orderId) },
+                {
+                    payment_status: "paid",
+                    service_status: "processing",
+                }
+            );
+
+            const cuOrder = await customerOrderServiceModel.findById(orderId);
+            const auOrder = await authOrderServiceModel.find({
+                orderServiceId: new ObjectId(orderId),
+            });
+
+            const time = moment(Date.now()).format("l");
+            const splitTime = time.split("/");
+
+            await myShopWallet.create({
+                amount: cuOrder.price,
+                month: splitTime[0],
+                year: splitTime[2],
+            });
+
+            for (let i = 0; i < auOrder.length; i++) {
+                await caregiverWallet.create({
+                    caregiverId: auOrder[i].caregiverId.toString(),
+                    amount: auOrder[i].price,
+                    month: splitTime[0],
+                    year: splitTime[2],
+                });
+            }
+
+            responseReturn(res, 200, { message: "success" });
         } catch (error) {
             console.log(error.message);
         }

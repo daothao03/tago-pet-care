@@ -118,6 +118,40 @@ export const update_profile = createAsyncThunk(
     }
 );
 
+export const create_stripe_connect_account = createAsyncThunk(
+    "caregiver/create_stripe_connect_account",
+    async () => {
+        try {
+            const {
+                data: { url },
+            } = await api.get(`/payment/create-stripe-connect-account`, {
+                withCredentials: true,
+            });
+            window.location.href = url;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+);
+
+export const active_stripe_connect_account = createAsyncThunk(
+    "caregiver/active_stripe_connect_account",
+    async (activeCode, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.put(
+                `/payment/active-stripe-connect-account/${activeCode}`,
+                {},
+                {
+                    withCredentials: true,
+                }
+            );
+            return fulfillWithValue(data);
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const caregiverReducer = createSlice({
     name: "caregiver",
     initialState: {
@@ -177,7 +211,27 @@ export const caregiverReducer = createSlice({
             })
             .addCase(update_profile.fulfilled, (state, { payload }) => {
                 state.successMessage = payload.message;
-            });
+            })
+            .addCase(
+                active_stripe_connect_account.pending,
+                (state, { payload }) => {
+                    state.loader = true;
+                }
+            )
+            .addCase(
+                active_stripe_connect_account.rejected,
+                (state, { payload }) => {
+                    state.loader = false;
+                    state.errorMessage = payload.message;
+                }
+            )
+            .addCase(
+                active_stripe_connect_account.fulfilled,
+                (state, { payload }) => {
+                    state.loader = false;
+                    state.successMessage = payload.message;
+                }
+            );
     },
 });
 

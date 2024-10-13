@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { get_categories } from "./store/reducer/homeReducer";
 import ServiceDetail from "./pages/ServiceDetail";
+import ConfirmOrder from "./pages/ConfirmOrder";
 
 function App() {
     const dispatch = useDispatch();
@@ -45,6 +46,7 @@ function App() {
                     path="/service/detail/:slug"
                     element={<ServiceDetail />}
                 />
+                <Route path="/order/confirm?" element={<ConfirmOrder />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/payment" element={<Payment />} />

@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { caregiver_info } from "../../store/reducer/caregiverReducer";
+import {
+    caregiver_info,
+    create_stripe_connect_account,
+} from "../../store/reducer/caregiverReducer";
 import { FaUserEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { TbPasswordUser } from "react-icons/tb";
@@ -103,8 +106,26 @@ const Profile = () => {
                                 Status: {caregiver.caregiverId?.status}
                             </span>
 
-                            <span className=" font-roboto  font-bold">
-                                Payment: {caregiver.caregiverId?.payment}
+                            <span className=" font-roboto font-bold">
+                                Payment Account:
+                                <span>
+                                    {userInfo.payment === "active" ? (
+                                        <span className="bg-red-500 text-white text-[1.2rem] cursor-pointer font-normal ml-2 px-2 py-0.5 rounded">
+                                            {userInfo.payment}
+                                        </span>
+                                    ) : (
+                                        <span
+                                            onClick={() =>
+                                                dispatch(
+                                                    create_stripe_connect_account()
+                                                )
+                                            }
+                                            className="bg-blue-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded"
+                                        >
+                                            Click Active
+                                        </span>
+                                    )}
+                                </span>
                             </span>
                         </div>
                     </div>

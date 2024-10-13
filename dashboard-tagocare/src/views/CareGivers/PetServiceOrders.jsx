@@ -97,7 +97,7 @@ const PetServiceOrders = () => {
                                     >
                                         <div className="flex justify-start items-center gap-4">
                                             <Link
-                                                // to={`/caregiver/order-detail/${d._id}`}
+                                                to={`/caregiver/order-service-detail/${d._id}`}
                                                 className="p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50"
                                             >
                                                 <FaEye />

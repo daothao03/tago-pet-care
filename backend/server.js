@@ -35,6 +35,8 @@ app.use("/api", require("./routes/frontend/cartRoutes"));
 
 app.use("/api", require("./routes/orderRoutes"));
 
+app.use("/api", require("./routes/paymentRoutes"));
+
 app.get("/", (req, res) => res.send("My backend"));
 
 const port = process.env.PORT;

@@ -14,7 +14,11 @@ const Payment = () => {
     return (
         <div>
             <div className="relative">
-                <HeaderPageCommon desc="Payment" showBookNow={false} />
+                <HeaderPageCommon
+                    showBookNow={false}
+                    title={service.name ? service.name : ""}
+                    desc={"Payment"}
+                />
             </div>
 
             {/* <section className="absolute top-[400px] left-[100px] grid grid-cols-2 gap-[100px]  w-[80%]"> */}
@@ -26,17 +30,11 @@ const Payment = () => {
                         className="object-cover rounded-[50px] w-[400px] "
                     />
                     <div className="mt-10">
+                        <span>{service.name}</span>
                         <span className="font-bold">
                             Time: {service.complete_time} minutes
                         </span>
-                        {/* <div className="mt-5">
-                                <span className="font-bold">Benefits: </span>
-                                <p>
-                                    {renderShortDescWithIcons(
-                                        service.short_description
-                                    )}
-                                </p>
-                            </div> */}
+
                         <div className="mt-5 flex gap-3 items-center">
                             <span className="font-bold">Price: </span>
                             {service.discount > 0 ? (
@@ -74,16 +72,10 @@ const Payment = () => {
                             <h2 className="font-bold font-pacifico text-[21px]">
                                 Order Summary
                             </h2>
-                            {/* <div className="flex justify-between items-center">
-                                <span>
-                                    <strong className="font-bold">{3}</strong>
-                                    Items and Shipping Fee Included
-                                </span>
-                                <span>$30 </span>
-                            </div> */}
+
                             <div className="flex justify-between items-center font-semibold">
                                 <span>Total Amount </span>
-                                <span className="text-[28px] text-green-600">
+                                <span className="text-[28px] font-bold text-green-600">
                                     {formatPrice(price)}
                                 </span>
                             </div>
@@ -126,9 +118,20 @@ const Payment = () => {
                                     src="http://localhost:3000/images/payment/stripe.png"
                                     alt=""
                                 />
-                                <span className="font-semibold">
-                                    Payment method: Stripe
-                                </span>
+                                <div>
+                                    <span className="font-semibold">
+                                        Payment method:
+                                    </span>
+                                    <div className="flex gap-[10px] ml-[60px]">
+                                        <input
+                                            checked
+                                            type="radio"
+                                            name=""
+                                            id=""
+                                        />
+                                        <label htmlFor="">Stripe</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

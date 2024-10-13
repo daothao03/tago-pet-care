@@ -5,14 +5,17 @@ import { useState } from "react";
 import CheckoutForm from "./CheckoutForm";
 import PropTypes from "prop-types";
 
-const stripePromise = loadStripe();
-("pk_test_51PkqJ401TMMiDul2hIOpt2HXOR7fm0jIrsngBHEzBdO1JEqe1yUKeZTysbNQCP1fmM3aRnJlNUXBYq7vsmZKvArb006mcpxaT0");
+const stripePromise = loadStripe(
+    "pk_test_51Q8NjKFNCE4AaJd48u6WphiPp1GqEtbI29b3pPAKoTOs0pESG7hFTLhznQdBTOok3lztfoCxDqFiu00P8gzzrLnM00BeJqcrSq"
+);
 
 const Stripe = ({ price, orderId }) => {
     const [clientSecret, setClientSecret] = useState("");
+
     const apperance = {
         theme: "stripe",
     };
+
     const options = {
         apperance,
         clientSecret,
@@ -21,7 +24,7 @@ const Stripe = ({ price, orderId }) => {
     const create_payment = async () => {
         try {
             const { data } = await axios.post(
-                "http://localhost:5000/api/order/create-payment",
+                "http://localhost:5000/api/payment/create-payment",
                 { price },
                 { withCredentials: true }
             );

@@ -5,6 +5,7 @@ const Home = lazy(() => import("../../views/Home"));
 const CareGiverLogin = lazy(() => import("../../views/auth/CareGiverLogin"));
 const Register = lazy(() => import("../../views/auth/Register"));
 import UnAuthorized from "./../../views/UnAuthorized";
+import Success from "../../views/Success";
 
 const publicRoutes = [
     {
@@ -26,6 +27,10 @@ const publicRoutes = [
     {
         path: "/unauthorized",
         element: <UnAuthorized />,
+    },
+    {
+        path: "/success?",
+        element: <Success />,
     },
 ];
 

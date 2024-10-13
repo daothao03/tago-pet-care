@@ -27,7 +27,7 @@ const CheckoutForm = ({ orderId }) => {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                // return_url: "http://localhost:3000/order/confirm",
+                return_url: "http://localhost:5174/order/confirm",
             },
         });
 
@@ -50,7 +50,7 @@ const CheckoutForm = ({ orderId }) => {
             <button
                 disabled={isLoading || !stripe || !elements}
                 id="submit"
-                className="px-10 py-[6px] hover:shadow-green-700/30 hover:shadow-lg bg-green-700 text-white rounded-sm"
+                className="flex text-[13px] mt-8 text-white cursor-pointer items-center gap-2 font-bold border-[3px] px-4 rounded-full rounded-tl-3xl py-1 bg-[#ed6436]"
             >
                 <span id="button-text">
                     {isLoading ? <div>Loading...</div> : "Pay Now"}

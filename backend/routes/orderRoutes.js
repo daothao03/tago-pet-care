@@ -22,11 +22,18 @@ router.get(
     authMiddleware,
     orderController.get_orderP_detail
 );
+router.get(
+    "/caregiver/get-orderService-detail/:orderServiceId",
+    authMiddleware,
+    orderController.get_orderS_detail
+);
 
 //DASHBOARD FRONTEND
 router.get(
     "/get-order-by-user/:customerId/:status",
     orderController.get_order_by_user
 );
+
+router.get("/order/confirm/:orderId", orderController.order_confirm);
 
 module.exports = router;

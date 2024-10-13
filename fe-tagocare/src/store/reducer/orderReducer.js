@@ -30,7 +30,7 @@ export const place_order = createAsyncThunk(
                 state: {
                     price: price + shipping_fee,
                     items,
-                    orderId: data.orderId,
+                    orderServiceId: data.orderId,
                 },
             });
 
