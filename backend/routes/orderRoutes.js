@@ -33,6 +33,10 @@ router.get(
     "/get-order-by-user/:customerId/:status",
     orderController.get_order_by_user
 );
+router.get(
+    "/get-order-product-by-user/:customerId/:status",
+    orderController.get_order_product_by_user
+);
 
 router.get("/order/confirm/:orderId", orderController.order_confirm);
 

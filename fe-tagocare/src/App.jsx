@@ -24,6 +24,8 @@ import { useEffect } from "react";
 import { get_categories } from "./store/reducer/homeReducer";
 import ServiceDetail from "./pages/ServiceDetail";
 import ConfirmOrder from "./pages/ConfirmOrder";
+import MyOrderProduct from "./pages/dashboard/MyOrderProduct";
+import PaymentProduct from "./pages/PaymentProduct";
 
 function App() {
     const dispatch = useDispatch();
@@ -50,6 +52,7 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/payment" element={<Payment />} />
+                <Route path="/payment-product" element={<PaymentProduct />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route
@@ -60,6 +63,10 @@ function App() {
                     <Route path="" element={<Dashboard />}>
                         <Route path="" element={<Index />} />
                         <Route path="my-orders" element={<Orders />} />
+                        <Route
+                            path="my-orders-product"
+                            element={<MyOrderProduct />}
+                        />
                         <Route
                             path="change-password"
                             element={<ChangePassword />}

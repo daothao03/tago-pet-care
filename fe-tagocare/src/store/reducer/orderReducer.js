@@ -26,11 +26,11 @@ export const place_order = createAsyncThunk(
                 navigate,
             });
 
-            navigate("/payment", {
+            navigate("/payment-product", {
                 state: {
                     price: price + shipping_fee,
                     items,
-                    orderServiceId: data.orderId,
+                    orderId: data.orderId,
                 },
             });
 
@@ -106,15 +106,30 @@ export const get_order_service_by_user = createAsyncThunk(
     }
 );
 
+export const get_order_product_by_user = createAsyncThunk(
+    "order/get_order_product_by_user",
+    async ({ customerId, status }, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get(
+                `/get-order-product-by-user/${customerId}/${status}`
+            );
+
+            return fulfillWithValue(data);
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const orderReducer = createSlice({
     name: "order",
     initialState: {
-        myOrders: [],
+        myOrdersProduct: [],
         myOrdersService: [],
         errorMessage: "",
         successMessage: "",
         loader: false,
-        myOrder: {},
+        myOrderProduct: {},
         myBookingServices: [],
         myBookingService: {},
     },
@@ -154,6 +169,12 @@ export const orderReducer = createSlice({
                 get_order_service_by_user.fulfilled,
                 (state, { payload }) => {
                     state.myOrdersService = payload.myOrdersService;
+                }
+            )
+            .addCase(
+                get_order_product_by_user.fulfilled,
+                (state, { payload }) => {
+                    state.myOrdersProduct = payload.myOrdersProduct;
                 }
             );
     },

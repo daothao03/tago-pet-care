@@ -404,6 +404,30 @@ class orderController {
         }
     };
 
+    get_order_product_by_user = async (req, res) => {
+        const { customerId, status } = req.params;
+
+        try {
+            let myOrdersProduct = [];
+            if (status !== "all") {
+                myOrdersProduct = await customerOrderModel.find({
+                    customerId: new ObjectId(customerId),
+                    delivery_status: status,
+                });
+            } else {
+                myOrdersProduct = await customerOrderModel.find({
+                    customerId: new ObjectId(customerId),
+                });
+            }
+
+            responseReturn(res, 200, {
+                myOrdersProduct,
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
     order_confirm = async (req, res) => {
         const { orderId } = req.params;
         try {

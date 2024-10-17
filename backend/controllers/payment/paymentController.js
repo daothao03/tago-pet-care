@@ -84,7 +84,6 @@ class paymentController {
         const { price } = req.body;
 
         try {
-            console.log("end create_payment");
             const payment = await stripe.paymentIntents.create({
                 amount: price,
                 currency: "vnd",
@@ -92,8 +91,6 @@ class paymentController {
                     enabled: true,
                 },
             });
-
-            console.log("end create_payment");
 
             responseReturn(res, 200, { clientSecret: payment.client_secret });
         } catch (error) {

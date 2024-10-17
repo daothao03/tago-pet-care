@@ -75,6 +75,17 @@ const Dashboard = () => {
                                 </li>
                                 <li className="flex justify-start items-center gap-2 py-2">
                                     <span className="text-xl">
+                                        <FaBorderAll className="text-[#ed6436]" />
+                                    </span>
+                                    <Link
+                                        to="/dashboard/my-orders-product"
+                                        className="block"
+                                    >
+                                        My Orders Product
+                                    </Link>
+                                </li>
+                                <li className="flex justify-start items-center gap-2 py-2">
+                                    <span className="text-xl">
                                         <FaHeart className="text-[#ed6436]" />
                                     </span>
                                     <Link
